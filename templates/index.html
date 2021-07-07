@@ -1,0 +1,50 @@
+{% extends "layouts/default.html" %}
+{% block title %}Common Lisp - Tabular demo{% endblock %}
+{% block content %}
+<div class="container">
+  <h1>htmx-tabular</h1>
+  <form>
+    <div class="mb-4">
+      <div class="col-6">
+	<input class="form-control form-control-lg" type="text" placeholder="Search..." name="query" hx-post="/search?start=0&amp;direction=asc&amp;sort-by=name" hx-trigger="keyup changed delay:500ms" hx-target="#results">
+      </div>
+    </div>
+  </form>
+  <div id="results" >
+    <p>100 results found</p>
+    
+    <table class="table table-striped">
+      
+      <thead>
+	
+	<tr class="table-dark">
+	  
+	  <th> ID </th>
+	  <th> <a href="/?sort-by=name&amp;direction=desc"> Name ↓</a></th>
+	  
+	  <th> <a href="/?sort-by=stars&amp;direction=desc"> Stars</a></th>
+	  
+	  <th> <a href="/?sort-by=price&amp;direction=desc"> Price</a></th>
+	  
+	  <th> <a href="/?sort-by=category&amp;direction=desc"> Category</a></th>
+	  
+	</tr>
+	
+      </thead>
+      
+      <tbody>
+	{% for food in foods %}
+	<tr>
+	  <td>{{food.id}}</td>
+	  <td>{{food.name}}</td>
+	  <td>{{food.rating}}</td>
+	  <td>{{food.price}}</td>
+	  <td>{{food.cuisine}}</td>
+	</tr>
+	{% endfor %}
+	
+	
+    </tbody></table>
+    
+    <nav aria-label="Page navigation example"><ul class="pagination"><li class="page-item active"><a class="page-link" href="/?start=0&amp;direction=asc&amp;sort-by=name">1</a></li><li class="page-item"><a class="page-link" href="/?start=10&amp;direction=asc&amp;sort-by=name">2</a></li><li class="page-item"><a class="page-link" href="/?start=20&amp;direction=asc&amp;sort-by=name">3</a></li><li class="page-item"><a class="page-link" href="/?start=30&amp;direction=asc&amp;sort-by=name">4</a></li><li class="page-item"><a class="page-link" href="/?start=40&amp;direction=asc&amp;sort-by=name">5</a></li><li class="page-item"><a class="page-link" href="/?start=50&amp;direction=asc&amp;sort-by=name">6</a></li><li class="page-item"><a class="page-link" href="/?start=60&amp;direction=asc&amp;sort-by=name">7</a></li><li class="page-item"><a class="page-link" href="/?start=70&amp;direction=asc&amp;sort-by=name">8</a></li><li class="page-item"><a class="page-link" href="/?start=80&amp;direction=asc&amp;sort-by=name">9</a></li><li class="page-item"><a class="page-link" href="/?start=90&amp;direction=asc&amp;sort-by=name">10</a></li></ul></nav></div></div>
+{% endblock %}
