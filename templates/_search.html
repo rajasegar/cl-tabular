@@ -1,0 +1,22 @@
+<div id="results" >
+  <p>{{total}} results found</p>
+  <table class="table table-striped">
+    <thead>
+      <tr class="table-dark">
+        <th> <a href="/?sort-by=name&amp;direction=desc"> Name ↓</a></th>
+        <th> <a href="/?sort-by=stars&amp;direction=desc"> Stars</a></th>
+        <th> <a href="/?sort-by=price&amp;direction=desc"> Price</a></th>
+        <th> <a href="/?sort-by=category&amp;direction=desc"> Category</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for food in foods %}
+      <tr>
+        <td>{{food.name}}</td>
+        <td>{{food.rating}}</td>
+        <td>{{food.price}}</td>
+        <td>{{food.cuisine}}</td>
+      </tr>
+      {% endfor %}
+  </tbody></table>
+</div>
