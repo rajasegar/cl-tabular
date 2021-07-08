@@ -60,18 +60,17 @@
 
 ;; Push 100 items into foods with random values
 (dotimes (i 100)
-  (push (list :id (+ 1 i)
-	      :name (random-elt *dishes*)
+  (push (list :name (random-elt *dishes*)
 	      :cuisine (random-elt *cuisines*)
 	      :rating (+ 1 (random 5))
 	      :price (+ 1 (random 100))) *foods*))
 
-(defun slice-list (start)
+(defun slice-list (start the-list)
   "Slice the list with 10 items from the start index"
   (let ((new-list nil))
     (dotimes (i 10)
-      (push (elt *foods* (+ i start)) new-list))
-    new-list))
+      (push (elt the-list (+ i start)) new-list))
+    (reverse new-list)))
 
 (defun query-param (name parsed)
   "Parse query param values"
@@ -81,8 +80,9 @@
   "Generate pagination"
   (let ((pages nil))
     (dotimes (i 10)
-      (push (list :id (+ 1 i) :start (* 10 i) :direction "asc" :sort-by "name") pages))
+      (push (list :id (+ 1 i) :start (* 10 i)) pages))
     (reverse pages)))
+
 
 (defun get-opposite-direction (direction)
   "Get the opposite direction"
@@ -90,14 +90,41 @@
       "desc"
       "asc"))
 
+(defun sort-list (direction sort-by)
+  "Sort a list based on the direction and key"
+  (cond ((string= sort-by "name") (sort-list-by-name direction))
+	((string= sort-by "rating") (sort-list-by-rating direction))
+	((string= sort-by "price") (sort-list-by-price direction))
+	((string= sort-by "cuisine") (sort-list-by-cuisine direction))))
+
+(defun sort-list-by-name (direction)
+  "Sort a list by name"
+  (let ((sort-fn (if (string= direction "asc") #'string< #'string>)))
+    (sort (copy-list *foods*) sort-fn :key (lambda (plist) (getf plist :name)))))
+
+(defun sort-list-by-rating (direction)
+  "Sort a list by rating"
+  (let ((sort-fn (if (string= direction "asc") #'< #'>)))
+    (sort (copy-list *foods*) sort-fn :key (lambda (plist) (getf plist :rating)))))
+
+(defun sort-list-by-price (direction)
+  "Sort a list by price"
+  (let ((sort-fn (if (string= direction "asc") #'< #'>)))
+    (sort (copy-list *foods*) sort-fn :key (lambda (plist) (getf plist :price)))))
+
+(defun sort-list-by-cuisine (direction)
+  "Sort a list by price"
+  (let ((sort-fn (if (string= direction "asc") #'string< #'string>)))
+    (sort (copy-list *foods*) sort-fn :key (lambda (plist) (getf plist :cuisine)))))
+
 (defroute "/" (&key _parsed)
   (format t "_parsed = ~a~%" _parsed)
   (let ((start (parse-integer (or (query-param "start" _parsed) "0")))
-        (direction (query-param "direction" _parsed))
-        (sort-by (query-param "sort-by" _parsed)))
+        (direction (or (query-param "direction" _parsed) "asc"))
+        (sort-by (or (query-param "sort-by" _parsed) "name")))
     (render #P"index.html"
             (list
-             :foods (slice-list start)
+             :foods (slice-list start (sort-list direction sort-by))
              :total (length *foods*)
 	     :pages (generate-pages)
 	     :start start

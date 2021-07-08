@@ -15,10 +15,22 @@
     <table class="table table-striped">
       <thead>
         <tr class="table-dark">
-          <th> <a href="/?sort-by=name&amp;direction={{opposite-direction}}"> Name ↓</a></th>
-          <th> <a href="/?sort-by=stars&amp;direction={{opposite-direction}}"> Stars</a></th>
-          <th> <a href="/?sort-by=price&amp;direction={{opposite-direction}}"> Price</a></th>
-          <th> <a href="/?sort-by=category&amp;direction={{opposite-direction}}"> Category</a></th>
+          <th><a href="/?start=0&sort-by=name&amp;direction={{opposite-direction}}">Name
+	      {% if sort-by == "name" and  direction == "asc" %} &uarr; {% endif %}
+	      {% if sort-by == "name" and  direction == "desc" %} &darr; {% endif %}
+	  </a></th>
+          <th><a href="/?start=0&sort-by=rating&amp;direction={{opposite-direction}}">Rating
+	      {% if sort-by == "rating" and  direction == "asc" %} &uarr; {% endif %}
+	      {% if sort-by == "rating" and  direction == "desc" %} &darr; {% endif %}
+	  </a></th>
+          <th><a href="/?start=0&sort-by=price&amp;direction={{opposite-direction}}"> Price
+	      {% if sort-by == "price" and  direction == "asc" %} &uarr; {% endif %}
+	      {% if sort-by == "price" and  direction == "desc" %} &darr; {% endif %}
+	  </a></th>
+          <th><a href="/?start=0&sort-by=cuisine&amp;direction={{opposite-direction}}">Cuisine
+	      {% if sort-by == "cuisine" and  direction == "asc" %} &uarr; {% endif %}
+	      {% if sort-by == "cuisine" and  direction == "desc" %} &darr; {% endif %}
+	  </a></th>
         </tr>
       </thead>
       <tbody>
@@ -36,7 +48,7 @@
       <ul class="pagination">
 	{% for page in pages %}
         <li class="page-item {% ifequal start page.start %} active {% endifequal %}" >
-	  <a class="page-link" href="/?start={{page.start}}&amp;direction={{page.direction}}&amp;sort-by={{page.sort-by}}">{{page.id}}</a>
+	  <a class="page-link" href="/?start={{page.start}}&amp;direction={{direction}}&amp;sort-by={{sort-by}}">{{page.id}}</a>
 	</li>
 	{% endfor %}
       </ul>
