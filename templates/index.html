@@ -6,7 +6,7 @@
   <form>
     <div class="mb-4">
       <div class="col-6">
-        <input class="form-control form-control-lg" type="text" placeholder="Search..." name="query" hx-post="/search?start=0&amp;direction=asc&amp;sort-by=name" hx-trigger="keyup changed delay:500ms" hx-target="#results">
+        <input class="form-control form-control-lg" type="text" placeholder="Search dish name..."  name="query" hx-post="/search?start=0&direction=asc&sort-by=name" hx-trigger="keyup changed delay:500ms" hx-target="#results">
       </div>
     </div>
   </form>
@@ -37,8 +37,16 @@
         {% for food in foods %}
         <tr>
           <td>{{food.name}}</td>
-          <td>{{food.rating}}</td>
-          <td>{{food.price}}</td>
+          <td>
+	    {% ifequal food.rating 1 %}&starf;{% endifequal %}
+	    {% ifequal food.rating 2 %}&starf;&starf;{% endifequal %}
+	    {% ifequal food.rating 3 %}&starf;&starf;&starf;{% endifequal %}
+	    {% ifequal food.rating 4 %}&starf;&starf;&starf;&starf;{% endifequal %}
+	    {% ifequal food.rating 5 %}&starf;&starf;&starf;&starf;&starf;{% endifequal %}
+	  </td>
+          <td>
+	    ${{food.price}}
+	  </td>
           <td>{{food.cuisine}}</td>
         </tr>
         {% endfor %}

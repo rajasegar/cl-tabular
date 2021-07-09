@@ -1,7 +1,7 @@
-a {
+table a {
   color: #eee;
 }
 
-a:hover {
+table a:hover {
   color: white;
 }
